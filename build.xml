@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project aws with libraries in sub-folder">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <!--define folder properties-->
+    <property name="dir.buildfile" value="."/>
+    <property name="dir.workspace" value="/home/nadir/workspace3"/>
+    <property name="dir.jarfile" value="${dir.buildfile}"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+
+	<path id="TestHelloWorld.classpath">
+	    <pathelement location="${dir.workspace}/aws/bin"/>
+	</path>
+   
+
+<target name="clean">
+    <delete dir="${dir.workspace}/aws/bin" />
+</target>
+
+<target name="init" depends="clean">
+    <mkdir dir="${dir.workspace}/aws/bin"/>
+    <copy includeemptydirs="false" todir="${dir.workspace}/aws/bin">
+        <fileset dir="${dir.workspace}/aws/src">
+            <exclude name="**/*.java"/>
+	    <exclude name="**/*.properties"/>
+        </fileset>
+    </copy>
+</target>
+
+<target name="build" depends="init,cp">
+    <javac debug="true"  destdir="${dir.workspace}/aws/bin" includeantruntime="false" source="${source}" target="${target}">
+        <src path="${dir.workspace}/aws/src"/>
+        <classpath refid="TestHelloWorld.classpath"/>
+    </javac>
+</target>
+
+<target name="cp">
+ 	<copy todir="${dir.workspace}/aws/bin/data" verbose="data" overwrite="true">
+        	<fileset dir="${dir.workspace}/aws/src/data"/>
+    	</copy>
+</target>
+
+
+
+    <target name="create_run_jar" depends="build">
+        <jar destfile="${dir.jarfile}/aws.jar">
+            <manifest>
+                <attribute name="Main-Class" value="aws.app"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="${dir.workspace}/aws/bin"/>
+        </jar>
+        <delete dir="${dir.jarfile}/aws_lib"/>
+        <mkdir dir="${dir.jarfile}/aws_lib"/>
+    </target>
+</project>
